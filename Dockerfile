@@ -15,5 +15,8 @@ RUN pip install -r requirements.txt
 # Make port 80 available to the world outside this container
 EXPOSE 80
 
+# Run prerequisite file
+CMD ["python", "prerequisite.py"]
+
 # Run app.py when the container launches
 CMD ["python", "app.py"]

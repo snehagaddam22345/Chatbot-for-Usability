@@ -1,4 +1,9 @@
 from flask import Flask, render_template
+from os import getenv
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 app = Flask(__name__)
 
@@ -9,4 +14,4 @@ from views import routes
 
 
 if __name__ == '__main__':
-    routes.app.run(host='0.0.0.0', port=5000)
+    routes.app.run(host=getenv('HOST'), port=5000)
