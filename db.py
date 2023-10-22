@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from os import getenv
 import os
 from dotenv import load_dotenv
+from sqlalchemy.dialects.postgresql import dialect_name
+
 
 load_dotenv()
 
