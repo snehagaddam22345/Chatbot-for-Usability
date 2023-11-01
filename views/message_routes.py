@@ -4,6 +4,13 @@ from flask import Flask, url_for, flash, redirect, render_template, request, ses
 from models import room_service, subject_service
 from db import db
 from sqlalchemy import text
+import openai
+from os import getenv
+import os
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 
 @app.route("/send", methods=["POST"])
@@ -12,6 +19,8 @@ def send():
     content = request.form["content"]
     room_id = request.form["room_id"]
     user_id = session["id"]
+    include_chatbot = request.form.get("chatbot")
+    print(include_chatbot)
     subect_id = room_service.get_subject(room_id, db)
 
     if routes.word_too_long(content):
@@ -25,6 +34,30 @@ def send():
             db.session.execute(
                 sql, {"user_id": user_id, "room_id": room_id, "content": content.strip()})
             db.session.commit()
+
+            if include_chatbot:
+                # Set your OpenAI API key
+                api_key = getenv('open_ai_key')
+                openai.api_key = api_key
+
+                # Define the prompt/question
+                prompt = content
+
+                # Generate a response
+                response = openai.Completion.create(
+                    engine="text-davinci-002",  # You can use gpt-3.5-turbo here as well
+                    prompt=prompt,
+                    max_tokens=50,  # You can adjust the maximum number of tokens in the response
+                )
+
+                # Extract and print the answer
+                answer = response.choices[0].text.strip()
+                print("Answer:", answer)
+                sql = text("""INSERT INTO messages (user_id, room_id, content, created_at, visible)
+                VALUES (:user_id, :room_id, :content, NOW(), 1)""")
+                db.session.execute(
+                    sql, {"user_id": 1, "room_id": room_id, "content": answer.strip()})
+                db.session.commit()
         except:
             return redirect("subjects")
         else:
@@ -33,7 +66,7 @@ def send():
         return redirect(url_for("subjects"))
 
 
-@ app.route("/delete_message", methods=["GET", "POST"])
+@app.route("/delete_message", methods=["GET", "POST"])
 def delete_message():
     routes.check_token()
     user_id = session["id"]

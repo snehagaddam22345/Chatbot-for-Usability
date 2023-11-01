@@ -57,4 +57,5 @@ CREATE TABLE subject_rights
         FOREIGN KEY (subject_id)
             REFERENCES subjects(id)
 );
-
+INSERT INTO users (username,password, role)
+VALUES ('Chatbot', 'Nopass', 1);
