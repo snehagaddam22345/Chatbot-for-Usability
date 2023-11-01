@@ -20,7 +20,7 @@ def send():
     room_id = request.form["room_id"]
     user_id = session["id"]
     include_chatbot = request.form.get("chatbot")
-    print(include_chatbot)
+
     subect_id = room_service.get_subject(room_id, db)
 
     if routes.word_too_long(content):
@@ -52,7 +52,7 @@ def send():
 
                 # Extract and print the answer
                 answer = response.choices[0].text.strip()
-                print("Answer:", answer)
+
                 sql = text("""INSERT INTO messages (user_id, room_id, content, created_at, visible)
                 VALUES (:user_id, :room_id, :content, NOW(), 1)""")
                 db.session.execute(
