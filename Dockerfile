@@ -9,6 +9,8 @@ COPY . .
 
 RUN pip install psycopg2-binary
 RUN pip install sqlalchemy
+RUN pip install Flask-SQLAlchemy
+Run pip install SQLAlchemy
 
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
