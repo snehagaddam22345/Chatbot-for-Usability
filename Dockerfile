@@ -7,7 +7,7 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . .
 
-RUN pip install --upgrade pip
+RUN pip install psycopg2-binary
 
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
