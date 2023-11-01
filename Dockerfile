@@ -11,6 +11,7 @@ COPY . .
 # RUN pip install sqlalchemy
 # RUN pip install Flask-SQLAlchemy
 # RUN pip install SQLAlchemy
+
 ﻿RUN pip install Flask==3.0.0
 RUN pip install Flask-SQLAlchemy==3.1.1
 RUN pip install SQLAlchemy==2.0.22
