@@ -22,7 +22,7 @@ RUN pip install --upgrade pip
 # RUN pip install psycopg2-binary
 # RUN pip install openai==0.28.1
 # RUN pip install flask==3.0.0
-# RUN pip install Flask==3.0.0
+RUN pip install Flask==3.0.0
 
 # RUN pip install flask
 # RUN pip install sqlalchemy
