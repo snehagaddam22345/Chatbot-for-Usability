@@ -16,13 +16,13 @@ RUN pip install --upgrade pip
 # Run requirements
 # RUN pip install Flask-SQLAlchemy==3.1.1
 # RUN pip install SQLAlchemy==2.0.22
-# RUN pip install Werkzeug==3.0.0
-# RUN pip install python-dotenv==1.0.0
 # RUN pip install psycopg2==2.9.9
 # RUN pip install psycopg2-binary
 # RUN pip install openai==0.28.1
 # RUN pip install flask==3.0.0
 RUN pip install Flask==3.0.0
+RUN pip install python-dotenv==1.0.0
+RUN pip install Werkzeug==3.0.0
 
 # RUN pip install flask
 # RUN pip install sqlalchemy
