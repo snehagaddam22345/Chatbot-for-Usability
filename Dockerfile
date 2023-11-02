@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.10.6
+FROM python:3.10.12
 
 # Set the working directory to /app
 WORKDIR /app
@@ -7,6 +7,7 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . .
 
+RUN pip install --upgrade pip
 # RUN pip install psycopg2-binary
 # RUN pip install sqlalchemy
 # RUN pip install Flask-SQLAlchemy
