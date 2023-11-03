@@ -1,78 +1,67 @@
 {% extends "base.html" %}
 
 {% block header %}
-
-<h1>{% block title %} {{ subject_name }} {% endblock %} </h1>
-<p style="font-size:16px;">'{{ content }}'</p>
-
-
+<div class="container text-center">
+    <!-- <h1>{% block title %} {{ subject_name }} {% endblock %}</h1> -->
+    <p class="lead">
+        <span class="bg-info p-3 rounded font-weight-bold">{{ content }}</span>
+    </p>
+</div>
 {% endblock %}
 
 {% block content%}
-
-{% if session.username %}
-
-
-{% if require == 1 and hasRight != True and session.admin != True %}
-
-<div>
-    <h2>This area is restricted by a password</h2>
-    <form action="/subject_login" method="POST">
-        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-        <fieldset>
-            <legend>Login to {{ subject_name }}</legend>
-            <input type="hidden" name="id" value="{{ id }}">
-            <p>Password:<br>
-                <input type="password" name="password" required></p>
-            <input type="submit" value="Log in">
-        </fieldset>
-    </form>
-</div>
-
-<!-- Has right to room or room is public -->
-{% else %}
-
-<p>You can create a new room <a href="/create/id={{ id }}">here</a></p>
-
-
-<div class="grid-wrapper">
-
-    {% if rooms is defined and rooms|length > 0 %}
-
-    <h3 style="text-align: center;">Enter a room to chat</h3>
-
-    <ul class="grid-list">
-        {% for room in rooms %}
-        <a href="{{ url_for('room', id=room[0]) }}">
-            <li>
-                <p>
-                    {{ room[1] }}
-                </p>
-            </li>
-            {% endfor %}
-        </a>
-    </ul>
+<div class="container">
+    {% if session.username %}
+    {% if require == 1 and not hasRight and not session.admin %}
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2 class="text-center">This area is restricted by a password</h2>
+            <form action="/subject_login" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <fieldset>
+                    <legend class="text-center">Login to {{ subject_name }}</legend>
+                    <input type="hidden" name="id" value="{{ id }}">
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Log in</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
     {% else %}
-    <p>{{ subject_name }} doesn't have any rooms yet</p>
+    <p>You can create a new room <a href="/create/id={{ id }}" class="btn btn-success">Create Room</a></p>
+    <h3 class="text-center">Enter a room to chat</h3>
+    <div class="row">
+        {% if rooms is defined and rooms|length > 0 %}
+        {% for room in rooms %}
+        <div class="col-md-4">
+            <a href="{{ url_for('room', id=room[0]) }}" class="card-link">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ room[1] }}</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-md-12">
+            <p class="text-center">{{ subject_name }} doesn't have any rooms yet.</p>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="text-center">
+        <p>Log in to view the rooms</p>
+        <a href="/login" class="btn btn-primary">Log in</a>
+        <p>or</p>
+        <a href="/register" class="btn btn-success">Register</a>
+    </div>
     {% endif %}
 </div>
-
-
-{% endif%}
-
-<!-- If not logged in-->
-{% else %}
-
-<p>
-    Log in to view the rooms
-    <br>
-    <a href="/">Log in</a>
-    <br>
-    or
-    <br>
-    <a href="/register">Register</a>
-</p>
-
-{% endif %}
-
 {% endblock %}

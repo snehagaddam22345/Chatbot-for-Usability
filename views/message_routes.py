@@ -97,17 +97,19 @@ def result():
     username = session["username"]
     query = request.args["query"]
 
-    sql = text("""SELECT username, room_name, content, messages.id AS messages_id FROM messages
+    sql = """SELECT username, room_name, content, messages.id AS messages_id FROM messages
         LEFT JOIN users ON user_id = users.id LEFT JOIN rooms on room_id = rooms.id
-        WHERE lower(content) LIKE :query AND messages.visible = 1""")
+        WHERE lower(content) LIKE :query AND messages.visible = 1"""
 
     sql_not_admin = " AND username = :username"
 
     if session["admin"]:
+        sql = text(sql)
         sql_query = db.session.execute(
             sql, {"query": "%"+query+"%"})
     else:
         sql2 = sql + sql_not_admin
+        sql2 = text(sql2)
         sql_query = db.session.execute(
             sql2, {"query": "%"+query.lower()+"%", "username": username})
 

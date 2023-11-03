@@ -1,36 +1,54 @@
 <!DOCTYPE html>
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Ville Manninen">
     <title>{% block title %}{% endblock %} - Chat404</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='404.ico') }}">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='404.ico') }}"> -->
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
 <body>
-    <div class="mainTitle">
-        <h1>CHAT404</h1>
-    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+        <div class="container">
+            <a class="navbar-brand text-white" href="/">CHAT404</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/subjects">Rooms</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/search">Search Messages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Register</a>
+                    </li>
+                    {% if session.username %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Log out</a>
+                    </li>
+                    <li class="nav-item">
+                        <span class="navbar-text text-white">{{ session.username }}</span>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Log in</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    <div class="navbar">
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/subjects">Rooms</a></li>
-                <li><a href="/search">Search</a></li>
-                <li><a href="/register">Register</a></li>
-                {% if session.username %}
-                <li style="float:right;"><a href="/logout">Log out</a></li>
-                <li style="float:right;">{{ session.username }}</li>
-                {% else %}
-                <li><a href="/">Log in</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-    </div>
-
-    <div class="content">
+    <div class="content container mt-4">
         <div class="pagetitle">
             {% if session.admin %}
             <b>Admin session &#128275</b>
@@ -38,7 +56,7 @@
             {% block header %}{% endblock %}
             {% with messages = get_flashed_messages() %}
             {% if messages %}
-            <div class=flash>
+            <div class="alert alert-success">
                 <ul>
                     {% for message in messages %}
                     <li>{{ message }}</li>
@@ -47,10 +65,13 @@
             </div>
             {% endif %}
             {% endwith %}
-            <br>
         </div>
+        {% block content %}{% endblock %}
+    </div>
 
-        {% block content %}{%  endblock %}
-
-    </div>     
+    <!-- Add Bootstrap JS and jQuery scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+</html>

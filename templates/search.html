@@ -1,81 +1,59 @@
 {% extends "base.html" %}
 
 {% block header %}
-<div>
-    <h1>{% block title %} Search {% endblock %} </h1>
+<div class="container">
+    <h1>{% block title %} Search Messages {% endblock %}</h1>
 </div>
 {% endblock %}
 
-{% block content%}
-
-{% if session.username %}
-<div>
-
-    {% if query is defined %}
-
-    {% if results|length == 1 %}
-    <p> Found {{ results|length }} match for '{{ query }}'</p>
-    <!-- Plural -->
-    {% else %}
-    <p> found {{ results|length }} matches for '{{ query }}'</p>
-    {% endif %}
-
-    {% endif %}
-
-    {% if results is defined %}
-    <div class="chat-wrapper">
-        {% for result in results %}
-
-        {% if result[0] == session.username or session.admin %}
-        <form action="/delete_message" method="POST">
-            <p class="message">
-                <input type="hidden" name="message_id" value=" {{ result[3] }}">
-                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                <input type="hidden" name="query" value=" {{ query }}">
-                <input type="submit" value="Delete">
-                <b>{{result[0]}}
-                    ({{result[1]}}):
-                </b>
-            <div style="text-transform: none;">{{ result[2]}}</div>
-            </p>
-        </form>
-
-        <!-- If message is not users -->
+{% block content %}
+<div class="container">
+    {% if session.username %}
+    <div>
+        {% if query is defined %}
+        {% if results|length == 1 %}
+        <p>Found {{ results|length }} match for '{{ query }}'</p>
         {% else %}
-
-        <p class="message"><b>{{result[0]}} ({{result[1]}}): </b>
-        <div style="text-transform: none;">{{ result[2]}}</div>
-        </p>
-
+        <p>Found {{ results|length }} matches for '{{ query }}'</p>
         {% endif %}
-
-        {% endfor %}
-
-    </div>
-
-    {% endif %}
-
-    <form action="/result" method="GET">
-
-        <div class="textarea-wrapper">
-            <input type="text" placeholder="Search.." name="query" autocomplete="off" maxlength="200" required>
-            <input type="submit" value="Search">
+        {% endif %}
+        {% if results is defined %}
+        <div class="chat-wrapper">
+            {% for result in results %}
+            <div class="message">
+                {% if result[0] == session.username or session.admin %}
+                <form action="/delete_message" method="POST">
+                    <input type="hidden" name="message_id" value="{{ result[3] }}">
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                    <input type="hidden" name="query" value="{{ query }}">
+                    <input type="submit" value="Delete" class="btn btn-danger">
+                    <b>{{ result[0] }} ({{ result[1] }}):</b>
+                    <div style="text-transform: none;">{{ result[2] }}</div>
+                </form>
+                {% else %}
+                <b>{{ result[0] }} ({{ result[1] }}):</b>
+                <div style="text-transform: none;">{{ result[2] }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
         </div>
-    </form>
+        {% endif %}
+        <form action="/result" method="GET">
+            <div class="textarea-wrapper">
+                <input type="text" class="form-control" placeholder="Search.." name="query" autocomplete="off" maxlength="200" required>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% else %}
+    <div>
+        <p>You must be logged in to use the search function</p>
+        <a href="/login" class="btn btn-primary">Log in</a>
+        <p>or</p>
+        <a href="/register" class="btn btn-success">Register</a>
+    </div>
+    {% endif %}
 </div>
-
-<!-- If not logged in-->
-{% else %}
-
-<div>
-    <p> You must be logged in to use the search function</p>
-    <a href="/">Log in</a>
-    <br>
-    or
-    <br>
-    <a href="/register">Register</a>
-</div>
-
-{% endif %}
-
 {% endblock %}

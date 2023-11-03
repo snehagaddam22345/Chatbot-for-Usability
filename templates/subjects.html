@@ -3,64 +3,45 @@
 {% block title %} Rooms {% endblock %}
 
 {% block header %}
-
-<h1> Subjects </h1>
-
+<div class="container text-center">
+    <h1>Subjects</h1>
+</div>
 {% endblock %}
 
 {% block content%}
+<div class="container">
+    {% if session.username %}
+    <p>You can create a new subject <a href="/create/id=0" class="btn btn-primary">Create Subject</a></p>
 
-{% if session.username %}
+    <h3 class="text-center">Select a subject</h3>
 
-<p>You can create a new subject <a href="/create/id=0">Here</a></p>
-
-<div class="grid-wrapper">
-
-    {% if subjects is defined %}
-
-    <h3 style="text-align: center;">Select a subject</h3>
-
-    <ul class="grid-list">
-
+    <div class="row">
+        {% if subjects is defined %}
         {% for subject in subjects %}
-
-        {% if subject[2] ==  0 %}
-
-        <a href="{{ url_for('subject', id=subject[0]) }}">
-            <li>
-                <p>{{ subject[1] }}</p>
-            </li>
-        </a>
-
-        <!-- Subject is not public -->
-        {% else %}
-        <a href="{{ url_for('subject', id=subject[0]) }}">
-            <li>
-                <p>{{ subject[1] }} 🔐</p>
-            </li>
-        </a>
-        {% endif %}
-
+        <div class="col-md-4">
+            <a href="{{ url_for('subject', id=subject[0]) }}" class="card-link">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ subject[1] }}</h5>
+                        {% if subject[2] == 0 %}
+                        <p class="card-text">Public</p>
+                        {% else %}
+                        <p class="card-text">Private 🔐</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+        </div>
         {% endfor %}
-
-    </ul>
-
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="text-center">
+        <p>You must be logged in to view rooms.</p>
+        <a href="/login" class="btn btn-primary">Log in</a>
+        <p>or</p>
+        <a href="/register" class="btn btn-success">Register</a>
+    </div>
     {% endif %}
-
 </div>
-
-<!-- If not logged in-->
-{% else %}
-
-<div>
-    <p>You must be logged in to view rooms</p>
-    <a href="/">Log in</a>
-    <br>
-    or
-    <br>
-    <a href="/">Register</a>
-</div>
-
-{% endif %}
-
 {% endblock %}

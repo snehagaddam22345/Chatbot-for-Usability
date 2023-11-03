@@ -2,40 +2,46 @@
 {% block title %} Home {% endblock %}
 
 {% block header %}
-
-<h1>Welcome to Chat404</h1>
-{{ message }}
-
+<div class="container text-center">
+    <h1>Welcome to Chat404</h1>
+    <p>{{ message }}</p>
+</div>
 {% endblock %}
 
 {% block content %}
-
-{% if session.username %}
-
-<h4>You are logged in as '{{ session.username }}' </h4>
-To chat go to <a href="/subjects">Rooms</a>
-<p>or</p>
-<a href="/logout">Log out</a>
-
-<!-- If not logged in-->
-{% else %}
-
-<h2> Log in to chat!</h2>
-
-<form action="/login" method="POST">
-    <fieldset>
-        <legend>Log in</legend>
-        <p>Username:<br>
-            <input type="text" placeholder="Username.." name="username" maxlength="20" autocomplete="off" required></p>
-        <p>Password:<br>
-            <input type="password" placeholder="Password.." name="password" maxlength="30" required></p>
-        <input type="submit" value="Log in"><br>
-        <p>New user?<br>
-            <a href="/register">Register here</a>
-        </p>
-    </fieldset>
-</form>
-
-{% endif %}
-
+<div class="container">
+    {% if session.username %}
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h4>You are logged in as {{ session.username }}</h4>
+            <p>To chat, go to <a href="/subjects" class="btn btn-success">Enter Rooms</a></p>
+            <p>or</p>
+            <a href="/logout" class="btn btn-primary">Log out</a>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2 class="text-center">Log in to chat!</h2>
+            <form action="/login" method="POST">
+                <fieldset>
+                    <legend class="text-center">Log in</legend>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Username.." maxlength="20" autocomplete="off" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password.." maxlength="30" required>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Log in</button>
+                    </div>
+                    <p class="text-center">New user? <a href="/register">Register here</a></p>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

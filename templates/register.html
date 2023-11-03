@@ -1,33 +1,43 @@
 {% extends "base.html" %}
 
 {% block header %}
-<h1>{% block title %}Register{% endblock %}</h1>
+<div class="container text-center">
+    <h1>{% block title %}Register{% endblock %}</h1>
+</div>
 {% endblock %}
 
-{% block content%}
-
-{% if session.username %}
-
-<p>You are logged in as '{{ session.username }}' </p>
-<br>
-<a href="/logout">Log out</a>
-
-<!-- If not logged in-->
-{% else %}
-
-<form action="/new_user" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <fieldset>
-        <legend>Register</legend>
-        <p>Username:<br>
-            <input type="text" name="username" maxlength="20" autocomplete="off" required></p>
-        <p>Password:<br>
-            <input type="password" name="password" maxlength="30" required></p><br>
-
-        <input type="submit" value="Register">
-    </fieldset>
-</form>
-
-{% endif %}
-
+{% block content %}
+<div class="container">
+    {% if session.username %}
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <p>You are logged in as {{ session.username }}</p>
+            <br>
+            <a href="/logout" class="btn btn-primary">Log out</a>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <form action="/new_user" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <fieldset>
+                    <!-- <legend class="text-center">Register</legend> -->
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" maxlength="20" autocomplete="off" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" maxlength="30" required>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}
