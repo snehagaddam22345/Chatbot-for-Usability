@@ -6,8 +6,8 @@ from db import db
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
-    username = request.form["username"]
-    password = request.form["password"]
+    username = request.form.get("username")
+    password = request.form.get("password")
     if user_service.login(username, password, db):
         flash("Welcome back", "message")
         return redirect(url_for("index"))
