@@ -19,7 +19,7 @@ def send():
     content = request.form["content"]
     room_id = request.form["room_id"]
     user_id = session["id"]
-    include_chatbot = request.form.get("chatbot")
+    exclude_chatbot = request.form.get("chatbot")
 
     subect_id = room_service.get_subject(room_id, db)
 
@@ -35,7 +35,7 @@ def send():
                 sql, {"user_id": user_id, "room_id": room_id, "content": content.strip()})
             db.session.commit()
 
-            if include_chatbot:
+            if not exclude_chatbot:
                 # Set your OpenAI API key
                 api_key = getenv('open_ai_key')
                 openai.api_key = api_key
@@ -47,7 +47,7 @@ def send():
                 response = openai.Completion.create(
                     engine="text-davinci-002",  # You can use gpt-3.5-turbo here as well
                     prompt=prompt,
-                    max_tokens=50,  # You can adjust the maximum number of tokens in the response
+                    max_tokens=1000
                 )
 
                 # Extract and print the answer
@@ -70,23 +70,27 @@ def send():
 def delete_message():
     routes.check_token()
     user_id = session["id"]
-    message_id = request.form["message_id"]
+    # message_id = request.form["message_id"]
+    message_ids = request.form.getlist('selected_messages[]')
     page = request.referrer
     try:
-        if session["admin"]:
-            sql = text("UPDATE messages SET visible = 0 WHERE id = :id")
-            db.session.execute(sql, {"id": message_id})
-            db.session.commit()
-        else:
-            sql = text("UPDATE messages SET visible = 0 WHERE id = :id AND user_id = :user_id")
-            db.session.execute(sql, {"id": message_id, "user_id": user_id})
-            db.session.commit()
+        for message_id in message_ids:
+            if session["admin"]:
+                sql = text("UPDATE messages SET visible = 0 WHERE id = :id")
+                db.session.execute(sql, {"id": message_id})
+                db.session.commit()
+            else:
+                sql = text("UPDATE messages SET visible = 0 WHERE id = :id AND user_id = :user_id")
+                db.session.execute(sql, {"id": message_id, "user_id": user_id})
+                db.session.commit()
     except:
         flash("Error deleteting message", "error")
         return redirect(url_for("subjects"))
     else:
-        flash("Message deleted", "message")
+        flash("Messages deleted", "message")
         return redirect(page)
+    print(message_ids)
+    return redirect(page)
 
 
 @app.route("/result", methods=["GET"])
