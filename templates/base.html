@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
-<body>
+<body style="background-color: #f8f9fa;">
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
         <div class="container">
             <a class="navbar-brand text-white" href="/">ChatPRO</a>
@@ -50,14 +50,14 @@
     </nav>
 
     <div class="content container mt-4">
-        <div class="pagetitle" style="color: #ffffff;">
+        <div class="pagetitle" style="color: #343a40;">
             {% if session.admin %}
             <b>Admin session &#128275</b>
             {% endif %}
             {% block header %}{% endblock %}
             {% with messages = get_flashed_messages() %}
             {% if messages %}
-            <div class="alert alert-success" style="color: #ffffff;">
+            <div class="alert alert-success" style="color: #343a40;">
                 <ul>
                     {% for message in messages %}
                     <li>{{ message }}</li>
